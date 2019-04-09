@@ -10,6 +10,12 @@ matrix:
   allow_failures:
     - php: 7.1
 
+
+env:
+  global:
+    TEST_CONFIG="phpunit.xml.dist"
+
+
 before_install:
   # Disable XDebug speed up test execution.
   - phpenv config-rm xdebug.ini || return 0
@@ -22,10 +28,9 @@ install:
   # Install a polyfill for Mongo extension on PHP 7
   - travis_retry composer require "alcaeus/mongo-php-adapter=^1.0.0" --ignore-platform-reqs
   - composer install
-  - composer info -i
 
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --configuration $TEST_CONFIG
   - git log $(git describe --abbrev=0 --tags)...HEAD --no-merges --pretty=format:"* [%h](http://github.com/${TRAVIS_REPO_SLUG}/commit/%H) %s (%cN)"
 
 services:
