@@ -35,3 +35,6 @@ script:
 
 services:
   - mongodb
+
+after_success:
+  - travis_retry php ./vendor/bin/php-coveralls -v --config .coveralls.yml -v;
